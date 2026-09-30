@@ -1,0 +1,99 @@
+# Threshold set T-2026.09-01. Every gate, the state machine and the review policy
+# read their parameters from here. Starting values follow the design review and are
+# meant to be tuned on DEV blocks only. Changing any value requires a new set id.
+id: T-2026.09-01
+description: Initial starting values from the TerraLens design review (Sep 2026).
+
+quality:                       # Gate 1
+  cloud_dilate_px: 3
+  shadow_dilate_px: 2
+  shadow_heights_m: [500, 1000, 1500, 2000, 3000]   # cloud heights tried for geometric shadow projection
+  shadow_dark_nir: 0.16        # projected shadow counts only on dark NIR pixels (reflectance)
+  haze_hot_mad_k: 4.0          # haze-optimised transform HOT = B02 - 0.5*B04 - 0.08 (Zhang et al. 2002, simplified);
+  haze_min_hot: 0.02           # a pixel is hazy when HOT > clear-pixel median + k * MAD and HOT > haze_min_hot
+  haze_confirm_max_fraction: 0.3   # an observation with more haze than this cannot confirm change
+  snow_ndsi: 0.4
+  snow_min_green: 0.3          # brightness separates snow from water (same formula as MNDWI)
+  saturation_dn: 65535
+  terrain_min_cos_i: 0.15      # DEM illumination below this -> terrain shadow
+  object_min_usable: 0.8       # an object is observed on a date only if >= 80 % of it is usable
+  obs_min_usable_fraction: 0.05  # below this the whole observation is unusable
+
+registration:                  # Gate 2
+  max_correctable_px: 2.0
+  min_correct_px: 0.1          # smaller shifts are left alone
+  residual_edge_suppress_px: 0.5
+  min_peak_ratio: 3.0          # phase-correlation peak / background below this -> weak peak
+  edge_band_px: 1
+  sliver_max_width_px: 1.5
+  sliver_edge_share: 0.6
+
+radiometry:                    # Gate 3
+  max_norm_rmse: 0.04
+  gain_range: [0.8, 1.25]
+  cross_sensor_penalty: true
+
+season:                        # Gate 4
+  peer_radius_m: 5000
+  peer_min_pixels: 200
+  min_abs_peer_z: 2.0
+  green_season_months: [8, 9, 10, 11]   # post-monsoon green season in central India
+  jrc_seasonal_occurrence: [5, 95]      # JRC occurrence % range treated as seasonal water
+  same_season_window_days: 45
+  water_departure_min_fraction: 0.10    # departure from seasonal range must exceed this share
+
+size:                          # Gate 5
+  mmu_px:
+    default: 10
+    water_expansion: 20
+    water_contraction: 20
+    road_development: 10
+  road_elongation: 5.0
+  speckle_open_px: 1
+
+detection:
+  p_detect: 0.6                # class probability needed for a transition
+  stable_window: 4             # previous usable observations considered
+  stable_min_obs: 3
+  stable_agreement: 0.8
+  object_post_share: 0.6       # post-change state must cover >= 60 % of the object
+  object_pre_share: 0.6
+  area_range_p: [0.75, 0.45]   # stricter / looser probability thresholds for the area range
+
+persistence:                   # Gate 6 / state machine
+  provisional_confirming_obs: 1
+  confirmed_confirming_obs: 2
+  confirmed_min_span_days: 20
+  insufficient_data_days: 60
+  reverse_consecutive_contradicting: 2
+  seasonal_classes_need_green_season: [construction, clearance, other_change]
+
+priority_zone:
+  p_detect: 0.5
+  mmu_px: 4
+  surface_tentative: true
+  keep_transient_visible: true
+
+temporal:
+  abrupt_sharpness: 0.7
+  gradual_min_intermediate_obs: 3
+  long_gap_days: 45
+
+confidence:
+  min_labels_for_calibrated_display: 200    # below this the number is shown as "uncalibrated score"
+  min_labels_per_outcome: 20
+  level_bins: [0.4, 0.7]                    # LOW < 0.4 <= MEDIUM < 0.7 <= HIGH (HIGH only if CONFIRMED)
+
+review:
+  audit_slice_fraction: 0.07
+  uncertainty_slice_fraction: 0.05
+  rank_order: [priority_zone, state, confidence, magnitude]
+
+retrieval:
+  background_sample: 5000
+  fetch_k: 200
+  exclusion_radius_m: 1500
+  mmr_lambda: 0.7
+  negative_lambda: 0.5
+  min_judged_for_calibration: 60
+  near_default_m: 500

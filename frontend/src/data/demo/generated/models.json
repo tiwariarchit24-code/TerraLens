@@ -1,0 +1,41 @@
+[
+ {
+  "id": "enc-remoteclip-vitb32",
+  "kind": "encoder",
+  "name": "RemoteCLIP ViT-B/32",
+  "license": "Apache-2.0",
+  "source": "huggingface.co/chendelong/RemoteCLIP @ bf1d8a3c",
+  "file": "models/encoders/remoteclip_vitb32/RemoteCLIP-ViT-B-32.pt",
+  "embeddingDim": 512,
+  "bands": "RGB",
+  "gsdSuitability": "trained mostly on aerial / VHR imagery",
+  "sha256": "60014e395d930a3f2963d1d89c8522bf4ad56775571e4356e866864789af85c4",
+  "sizeBytes": 605208421
+ },
+ {
+  "id": "enc-skyclip-vitb32-50pct",
+  "kind": "encoder",
+  "name": "SkyCLIP ViT-B/32 (50 %)",
+  "license": "MIT",
+  "source": "huggingface.co/torchgeo/vit_base_patch32_224_skyclip_50pct @ 7f82439a",
+  "file": "models/encoders/skyclip_vitb32_50pct/vit_base_patch32_224_skyclip_50pct-5e3a3c68.pth",
+  "embeddingDim": 512,
+  "bands": "RGB",
+  "gsdSuitability": "training images include Sentinel-2 and Landsat",
+  "sha256": "3b40f7a3d1aa6d035f5b7d731569277476f9fde2569988c5111ee4d816f6a591",
+  "sizeBytes": 351460498
+ },
+ {
+  "id": "enc-openclip-vitb32-laion2b",
+  "kind": "encoder",
+  "name": "OpenCLIP ViT-B/32 LAION-2B (baseline)",
+  "license": "MIT",
+  "source": "huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K @ 1a25a446",
+  "file": "models/encoders/openclip_vitb32_laion2b/open_clip_model.safetensors",
+  "embeddingDim": 512,
+  "bands": "RGB",
+  "gsdSuitability": "general-domain photographs (control for the bake-off)",
+  "sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+  "sizeBytes": 605143316
+ }
+]

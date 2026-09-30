@@ -1,0 +1,300 @@
+# TerraLens concept registry = capability table.
+#
+# kind:      visual | change | reference | attribute | metadata
+# evidence:  observed | inferred | gis | verified_record | unverifiable
+# route:     appearance (vector index) | event (change-event table) | gis (PostGIS layer)
+#            | metadata (scene table) | record (verified-record source) | none
+# max_gsd_m: coarsest ground sample distance at which the concept is resolvable.
+#            At a coarser archive GSD the concept is marked unverifiable for that archive.
+# calibration: pending until judged examples exist; retrieval scores stay "uncalibrated".
+# layer_requirement: for gis/record concepts, the layer kind that must be loaded; if it is
+#            absent the concept degrades to `evidence_otherwise`.
+registry_version: R-2026.09-01
+
+concepts:
+  # ---------------------------------------------------------------- visual (appearance route)
+  - id: open_pit_mine
+    kind: visual
+    synonyms: [open-pit mine, open pit mine, opencast mine, open-cast mine, open cast mine, mine, mines, coal mine, quarry, quarries, stone quarry, mining pit, khadan, खदान]
+    prompts:
+      - a satellite image of an open-pit mine
+      - an open-cast coal mine seen from above
+      - a quarry with terraced pits and haul roads
+      - an aerial view of a large mining pit with spoil heaps
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+    explanation: Large mining pits span many 10 m pixels; identification is inferred from appearance.
+  - id: reservoir
+    kind: visual
+    synonyms: [reservoir, reservoirs, dam lake, lake, lakes, water body, water bodies, pond, jalashay, जलाशय, बांध]
+    prompts:
+      - a satellite image of a reservoir behind a dam
+      - a large lake seen from above
+      - an aerial view of a water reservoir with an irregular shoreline
+    evidence: observed
+    route: appearance
+    max_gsd_m: 30
+    gis_layer: water
+  - id: river
+    kind: visual
+    synonyms: [river, rivers, riverbank, river bank, stream, nadi, नदी]
+    prompts:
+      - a satellite image of a river
+      - a winding river with sandbars seen from above
+    evidence: observed
+    route: appearance
+    max_gsd_m: 30
+    gis_layer: river
+  - id: sandbar
+    kind: visual
+    synonyms: [sandbar, sand bar, river sand, floodplain, sand bank]
+    prompts:
+      - a satellite image of sandbars in a wide river
+      - bright sand deposits along a braided river channel
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: dense_urban
+    kind: visual
+    synonyms: [dense urban area, urban area, city, town, settlement, built-up area, built up area, residential area, shahar, शहर]
+    prompts:
+      - a satellite image of a dense urban area
+      - a city with many buildings and streets seen from above
+      - an aerial view of a densely built residential area
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: built_structure
+    kind: visual
+    synonyms: [built structure, built structures, structure, structures, building, buildings, facility, facilities, imarat, इमारत]
+    prompts:
+      - a satellite image of buildings
+      - an aerial view of built structures and paved areas
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+    note: At 10 m only building clusters and large structures are resolvable, not individual small buildings.
+  - id: industrial_complex
+    kind: visual
+    synonyms: [industrial complex, industrial area, factory, factories, power plant, thermal power plant, plant, cement plant]
+    prompts:
+      - a satellite image of an industrial complex
+      - a power plant with large buildings and cooling structures seen from above
+      - an aerial view of a factory site with warehouses
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: airport
+    kind: visual
+    synonyms: [airport, airports, airfield, runway, airstrip]
+    prompts:
+      - a satellite image of an airport with a runway
+      - an aerial view of an airfield and runway
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: solar_farm
+    kind: visual
+    synonyms: [solar farm, solar park, solar plant, solar panels, photovoltaic]
+    prompts:
+      - a satellite image of a solar farm with rows of panels
+      - an aerial view of a large photovoltaic power station
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 20
+  - id: cropland
+    kind: visual
+    synonyms: [cropland, farmland, farm, farms, agricultural fields, fields, paddy, paddy fields, khet, खेत]
+    prompts:
+      - a satellite image of agricultural fields
+      - farmland with a patchwork of fields seen from above
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: forest
+    kind: visual
+    synonyms: [forest, forests, woodland, trees, dense vegetation, jungle, van, जंगल, वन]
+    prompts:
+      - a satellite image of a dense forest
+      - an aerial view of tree canopy
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: bare_land
+    kind: visual
+    synonyms: [bare land, bare ground, bare soil, open ground, barren land, wasteland, open land]
+    prompts:
+      - a satellite image of bare ground
+      - an aerial view of barren land with exposed soil
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: vegetation
+    kind: visual
+    synonyms: [vegetation, green cover, greenery, grassland, scrub, shrubland]
+    prompts:
+      - a satellite image of green vegetation
+      - an aerial view of grassland and shrubs
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 30
+  - id: water
+    kind: visual
+    synonyms: [water, open water, surface water, paani, पानी]
+    prompts:
+      - a satellite image of open water
+    evidence: observed
+    route: appearance
+    max_gsd_m: 30
+
+  # ---------------------------------------------------------------- change (event route)
+  - id: construction
+    kind: change
+    synonyms: [construction, constructed, newly constructed, new construction, newly built, built, new buildings, new structures, building activity, development, nirman, निर्माण]
+    change_classes: [construction]
+    evidence: inferred
+    route: event
+    max_gsd_m: 30
+    explanation: Inferred from a persistent transition to built-up on the land-cover classifier, above the minimum mapping unit.
+  - id: clearance
+    kind: change
+    synonyms: [clearance, cleared, clearing, deforestation, vegetation clearance, vegetation loss, tree loss, tree felling, land clearing]
+    change_classes: [clearance]
+    evidence: inferred
+    route: event
+    max_gsd_m: 30
+  - id: road_development
+    kind: change
+    synonyms: [road development, new road, new roads, road construction, road building, highway construction, expressway, corridor]
+    change_classes: [road_development]
+    evidence: inferred
+    route: event
+    max_gsd_m: 20
+    note: Only wide or high-contrast corridors are resolvable at 10 m.
+  - id: water_contraction
+    kind: change
+    synonyms: [water contraction, shrank, shrunk, shrinking, shrinkage, dried up, drying, receded, water loss, drawdown]
+    change_classes: [water_contraction]
+    evidence: observed
+    route: event
+    max_gsd_m: 30
+  - id: water_expansion
+    kind: change
+    synonyms: [water expansion, flooding, flooded, flood, inundation, new water, filled, expanded water]
+    change_classes: [water_expansion]
+    evidence: observed
+    route: event
+    max_gsd_m: 30
+  - id: mine_expansion
+    kind: change
+    synonyms: [mine expansion, mining expansion, quarry expansion, pit expansion]
+    change_classes: [clearance, other_change]
+    evidence: inferred
+    route: event
+    max_gsd_m: 30
+  - id: any_change
+    kind: change
+    synonyms: [change, changes, changed, disappeared, appeared, expanded, contracted]
+    change_classes: [construction, clearance, road_development, water_expansion, water_contraction, other_change]
+    evidence: inferred
+    route: event
+    max_gsd_m: 30
+
+  # ---------------------------------------------------------------- reference layers (gis route)
+  - id: ref_river
+    kind: reference
+    synonyms: [river, rivers, riverbank, river bank, river edge, stream, nadi, नदी]
+    evidence: gis
+    route: gis
+    layer: river
+    measure_from_options: [water polygon edge, centreline]
+  - id: ref_road
+    kind: reference
+    synonyms: [road, roads, highway, highways, street, sadak, सड़क]
+    evidence: gis
+    route: gis
+    layer: road
+  - id: ref_water
+    kind: reference
+    synonyms: [water body, water bodies, lake, reservoir, pond]
+    evidence: gis
+    route: gis
+    layer: water
+  - id: ref_protected_area
+    kind: reference
+    synonyms: [protected area, sanctuary, national park, reserve forest]
+    evidence: gis
+    route: gis
+    layer: protected_area
+    evidence_otherwise: unverifiable
+    note: No protected-area layer is staged in the demo archive.
+
+  # ---------------------------------------------------------------- attributes
+  - id: soil_black_cotton
+    kind: attribute
+    synonyms: [black cotton soil, black soil, vertisol, vertisols, regur, kaali mitti, काली मिट्टी]
+    evidence: gis
+    route: gis
+    layer: soil_vertisol
+    evidence_otherwise: unverifiable
+    explanation: Soil class is never read from optical pixels. With the SoilGrids Vertisols layer (modelled, 250 m) it is a coarse GIS-derived condition.
+  - id: storeys
+    kind: attribute
+    synonyms: [storey, storeys, story, stories, floors, floor, storied, multi-storey, high-rise, tall building, building height, height]
+    evidence: gis
+    route: gis
+    layer: building_height
+    evidence_otherwise: unverifiable
+    explanation: Building height or storey count is not observable in single optical images at 10 m. It needs a DSM, LiDAR or validated height layer, none of which is loaded.
+  - id: vehicle
+    kind: attribute
+    synonyms: [vehicle, vehicles, car, cars, truck, trucks, lorry, lorries, bus, buses, vehicle concentration, vehicle concentrations, vehicle park, parking]
+    evidence: inferred
+    route: appearance
+    max_gsd_m: 1
+    evidence_otherwise: unverifiable
+    explanation: A car is a fraction of one 10 m pixel. Vehicles are observable only on sub-metre (VHR) imagery.
+  - id: vehicle_model
+    kind: attribute
+    synonyms: [car model, vehicle model, make and model, make, model of car, brand]
+    evidence: unverifiable
+    route: none
+    explanation: Make and model cannot be verified from satellite imagery at any archive resolution.
+  - id: ownership
+    kind: attribute
+    synonyms: [owner, owners, owned by, ownership, current owner, registered owner, belongs to]
+    evidence: unverifiable
+    route: record
+    layer: registry_record
+    explanation: Ownership appears in no image, and there is no join key from imagery to a registration record.
+  - id: purchase_date
+    kind: attribute
+    synonyms: [purchase date, bought, purchased, bought on, date of purchase, sold]
+    evidence: unverifiable
+    route: record
+    layer: registry_record
+    explanation: Purchase dates appear in no image.
+  - id: identity
+    kind: attribute
+    synonyms: [person, people, individual, identity, who, name of]
+    evidence: unverifiable
+    route: none
+    explanation: Individuals cannot be identified from satellite imagery, and doing so is out of scope.
+  - id: legality
+    kind: attribute
+    synonyms: [illegal, legal, unauthorised, unauthorized, encroachment, permit, permitted, violation]
+    evidence: verified_record
+    route: record
+    layer: permit_record
+    evidence_otherwise: unverifiable
+    explanation: Legality needs zoning or permit records; imagery can only show that construction occurred.
+
+  # ---------------------------------------------------------------- metadata
+  - id: sensor_sentinel2
+    kind: metadata
+    synonyms: [sentinel-2, sentinel 2, s2, sentinel2]
+    evidence: observed
+    route: metadata
+    field: sensor
+    value: sentinel-2

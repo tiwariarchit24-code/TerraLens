@@ -1,0 +1,25 @@
+# Demo areas of interest. All lie in UTM zone 44N (EPSG:32644), so one grid
+# convention serves the whole archive. Bounding boxes are WGS84 lon/lat; the
+# analysis grid snaps them outward to multiples of the grid block (see grid.py).
+analysis_crs: EPSG:32644
+aois:
+  korba:
+    name: Korba coalfield (Gevra, Dipka, Kusmunda)
+    bbox: [82.53, 22.30, 82.70, 22.365]
+    purpose: [similarity, discovery, clearance, mine expansion]
+  gangrel:
+    name: Gangrel reservoir, Dhamtari
+    bbox: [81.47, 20.56, 81.60, 20.65]
+    purpose: [water extent change, seasonal gate]
+  prayagraj:
+    name: Prayagraj Ganga floodplain (Maha Kumbh 2025)
+    bbox: [81.85, 25.40, 81.93, 25.48]
+    purpose: [transient events, persistence, priority zone]
+  naya_raipur:
+    name: Naya Raipur (Atal Nagar) core
+    bbox: [81.75, 21.12, 81.82, 21.21]
+    purpose: [construction, timelapse, seasonal false-alarm test]
+  raipur_kharun:
+    name: Raipur west, Kharun river
+    bbox: [81.52, 21.18, 81.60, 21.28]
+    purpose: [compound query near river, construction]

@@ -1,0 +1,9 @@
+{
+ "code": "radiometry_inconsistent",
+ "reasons": [
+  "metadata implies subtracting 1000 DN, but 33.0% of valid NIR/SWIR pixels have DN below 1000 (0.5th percentile 80); applying the offset would give negative reflectance, so the DNs cannot still contain the offset. The metadata contradicts the data; an administrator must decide (quarantine release with an explicit radiometric override)."
+ ],
+ "files": [
+  "S2B_44QNH_20250223_0_L2A"
+ ]
+}

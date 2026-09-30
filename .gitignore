@@ -1,0 +1,45 @@
+# Environment / local tooling
+.env/
+.mamba/
+.tools/
+
+# Local databases / runtime state
+var/
+*.db
+*.sqlite
+*.sqlite3
+
+# Raw / staged satellite data
+data/staging/
+data/gis/
+*.tif
+*.tiff
+*.jp2
+
+# Large model weights
+models/encoders/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
